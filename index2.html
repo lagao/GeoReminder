@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://www.parsecdn.com/js/parse-1.6.14.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/core.js"></script>
+    <title>Registration Form Using jQuery - Demo Preview</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <link rel="stylesheet" href="css/style.css"/>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/registration.js"></script>
+    <script type="text/javascript" src="js/message.js"></script>
+
+
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="main">
+          <form class="form" action=# id="form">
+            <h2>Registration</h2><hr/>
+            
+            <label>Email :</label>
+            <input type="text" name="demail" id="email">
+            
+            <label>Password :</label>
+            <input type="password" name="password" id="password">
+            
+            <label>Confirm Password :</label>
+            <input type="password" name="cpassword" id="cpassword">
+            
+            <input type="submit" name="register" id="register" value="Register">
+
+        </form>   
+    </div>
+</div>
+
+<button onclick="getLocation()">Get Your Location</button>
+
+<div id="mapholder"></div>
+
+
+<ul id="message1"></ul>
+<form id="messageform" action="#" >
+    <textarea id="message" placeholder="Write your message here..." required></textarea>
+
+    <input type="submit" name="message" id="messagebutton" value="Send Message">
+</form>
+
+
+<script>
+    console.log("Successfully sent!")
+
+    function register(){
+        var user = new Parse.User();
+    user.set("email", $('#email').val()); //this inputs whatever user inputs//
+    user.set("username", $('#email').val())
+    user.set("password", $('#password').val());
+    user.signUp(null, {
+      success: function(user) {
+    // Hooray! Let them use the app now.
+},
+error: function(user, error) {
+    // Show the error message somewhere and let the user try again.
+    alert("Error: " + error.code + " " + error.message);
+}
+});
+}
+
+function message(){
+    var Message = Parse.Object.extend("message");
+    console.log("Message also successfully sent!") 
+    var message3 = new Message ();
+    message3.set("message", $('#message').val());
+    message3.set("OwnerID", Parse.User.current().id);
+    message3.set("ReceiverID", Parse.User.current().id)
+
+
+    message3.save(null, {
+        success: function(message) {
+         // Execute any logic that should take place after the object is saved.
+         alert('New object created with objectId: ' + message.id);
+     },
+     error: function(message, error) {
+          // Execute any logic that should take place if the save fails.
+         // error is a Parse.Error with an error code and message.
+         alert('Failed to create new object, with error code: ' + error.message);
+     }
+ });
+}
+
+
+
+
+
+$('#form').submit(function(e) {
+    e.preventDefault();
+    register();
+  // Grab inputs and send to Parse 
+});
+
+$('#messageform').submit(function(e) {
+    e.preventDefault();
+    message();
+  // Grab inputs and send to Parse 
+});
+
+Parse.initialize("APPLICATION_ID");
+Parse.serverURL = 'http://localhost:1337/parse';
+
+
+var x = document.getElementById("demo");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+    var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="
+    +latlon+"&zoom=19&size=400x300&sensor=false";
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+        x.innerHTML = "User denied the request for Geolocation."
+        break;
+        case error.POSITION_UNAVAILABLE:
+        x.innerHTML = "Location information is unavailable."
+        break;
+        case error.TIMEOUT:
+        x.innerHTML = "The request to get user location timed out."
+        break;
+        case error.UNKNOWN_ERROR:
+        x.innerHTML = "An unknown error occurred."
+        break;
+    }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+/* below line is used for online google font */
+@import url(http://fonts.googleapis.com/css?family=Droid+Serif);
+
+h2{
+	text-align: center;
+	font-size: 24px;
+}
+
+hr{
+	margin-bottom: 30px;
+}
+
+div.container{
+	width: 960px;
+	height: 610px;
+	left: -200px;
+	margin:10px auto;
+	font-family: 'Droid Serif', serif;
+	position:relative;
+}
+
+div.main{
+	width: 320px;
+	float:left;
+	padding: 0px 10px 20px;
+	background-color: white;
+	border: 5px solid white;
+	border-radius: 2px;
+	font-size: 13px;
+}
+
+input[type=text],[type=password] {
+	width: 97.7%;
+	height: 34px;
+	padding-left: 5px;
+	margin-bottom: 8px;
+	margin-top: 8px;
+	border: 2px solid #00F5FF;
+	color: #4f4f4f;
+	font-size: 16px;
+}
+
+#messages {
+  margin-top: 1.5rem;
+  padding-left: 15px;
+}
+
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 2px solid #00F5FF;
+  border-radius: 3px;
+  min-height: 100px;
+  margin-bottom: 1rem;
+}
+
+button {
+    background: #86b32d;
+  border-bottom: 1px solid #5d7d1f;
+   display: inline-block;
+  border-radius: 3px;
+  border: none;
+  font-size: 0.9rem;
+  padding: 0.6rem 1em;
+  color: white;
+  margin: 0 0.25rem;
+  text-align: center;
+  background: #BABABA;
+  border-bottom: 1px solid #999;
+}
+
+#messagebutton {
+  background: #86b32d;
+  border-bottom: 1px solid #5d7d1f;
+   display: inline-block;
+  border-radius: 3px;
+  border: none;
+  font-size: 0.9rem;
+  padding: 0.6rem 1em;
+  color: white;
+  margin: 0 0.25rem;
+  text-align: center;
+  background: #BABABA;
+  border-bottom: 1px solid #999;
+}
+
+#messagebutton:hover{
+    background: linear-gradient(#36caf0 5%, #22abe9 100%);
+}
+
+label{
+	color: #464646;
+	text-shadow: 0 1px 0 #fff;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#register {
+  background: #86b32d;
+  border-bottom: 1px solid #5d7d1f;
+   display: inline-block;
+  border-radius: 3px;
+  border: none;
+  font-size: 0.9rem;
+  padding: 0.6rem 1em;
+  color: white;
+  margin: 0 0.25rem;
+  text-align: center;
+  background: #BABABA;
+  border-bottom: 1px solid #999;
+}
+
+#register:hover{
+    background: linear-gradient(#36caf0 5%, #22abe9 100%);
+}
+
+/* -------------------------------------
+    CSS for sidebar (optional) 
+---------------------------------------- */
+.fugo{
+	float:right;
+}
+
