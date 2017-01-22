@@ -216,7 +216,7 @@ var x = document.getElementById("demo");
 function showPosition(position) {
     var latlon = position.coords.latitude + "," + position.coords.longitude;
 
-    geo(position.coords.latitude, position.coords.longitude);
+     geo(position.coords.latitude, position.coords.longitude);
 
     var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="
     +latlon+"&zoom=19&size=400x300&sensor=false";
