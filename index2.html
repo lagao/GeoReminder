@@ -11,7 +11,9 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/registration.js"></script>
     <script type="text/javascript" src="js/message.js"></script>
-
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
+<script src="jquery.geocomplete.js"></script>
+   
 
 
 </head>
@@ -46,9 +48,11 @@
 <ul id="message1"></ul>
 <form id="messageform" action="#" >
     <textarea id="message" placeholder="Write your message here..." required></textarea>
-
+    <br>
     <input type="submit" name="message" id="messagebutton" value="Send Message">
 </form>
+
+ <div id="mapid"></div>
 
 
 <script>
@@ -70,10 +74,10 @@ error: function(user, error) {
 });
 }
 
-function message(){
+function message(){ //message function isn't tied to anything
     var Message = Parse.Object.extend("message");
     console.log("Message also successfully sent!") 
-    var message3 = new Message ();
+    var message3 = new Message (); //variable name is separate from function
     message3.set("message", $('#message').val());
     message3.set("OwnerID", Parse.User.current().id);
     message3.set("ReceiverID", Parse.User.current().id)
@@ -94,15 +98,37 @@ function message(){
 
 
 
+function geo(geo_x, geo_y){ //message function isn't tied to anything
+    var Geo = Parse.Object.extend("geo");
+    console.log("Geo also successfully sent!") 
+    var geoPackage = new Geo (); //variable name is separate from function
+    geoPackage.set("geo_x", geo_x);
+    geoPackage.set("geo_y", geo_y);
+    geoPackage.set("OwnerID", Parse.User.current().id);
+    geoPackage.set("ReceiverID", Parse.User.current().id)
+
+
+    geoPackage.save(null, {
+        success: function(message) {
+         // Execute any logic that should take place after the object is saved.
+         alert('New object created with objectId: ' + message.id);
+     },
+     error: function(message, error) {
+          // Execute any logic that should take place if the save fails.
+         // error is a Parse.Error with an error code and message.
+         alert('Failed to create new object, with error code: ' + error.message);
+     }
+ });
+}
 
 
 $('#form').submit(function(e) {
     e.preventDefault();
-    register();
+    register(); //call means () which is to call the register function
   // Grab inputs and send to Parse 
 });
 
-$('#messageform').submit(function(e) {
+$('#messageform').submit(function(e) { //the # needs to have form name
     e.preventDefault();
     message();
   // Grab inputs and send to Parse 
@@ -125,9 +151,12 @@ function getLocation() {
 function showPosition(position) {
     var latlon = position.coords.latitude + "," + position.coords.longitude;
 
+    geo(position.coords.latitude, position.coords.longitude);
+
     var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="
     +latlon+"&zoom=19&size=400x300&sensor=false";
     document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+    console.log("position.coords.latitude + "," + position.coords.longitude;")
 }
 
 function showError(error) {
@@ -147,6 +176,9 @@ function showError(error) {
     }
 }
 
+
 </script>
+
+
 </body>
 </html>
