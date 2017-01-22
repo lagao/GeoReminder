@@ -16,20 +16,20 @@
       fieldset input { width: 95%; }
       
       ul span { color: #999; }
-    </style>
+  </style>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script type="text/javascript" src="js/registration.js"></script>
-    <script type="text/javascript" src="js/message.js"></script>
-   
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js/registration.js"></script>
+  <script type="text/javascript" src="js/message.js"></script>
+
 
 
 </head>
 
 <body>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<!-- Sign up Form -->
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Sign up Form -->
 
     <div class="container">
         <div class="main">
@@ -56,49 +56,50 @@
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!-- Message Form -->
 
-<ul id="message1"></ul>
+<!--ul id="message1"></ul>
 <form id="messageform" action="#" >
     <textarea id="message" placeholder="Write your message here..." required></textarea>
     <br>
     <input type="submit" name="message" id="messagebutton" value="Send Message">
-</form>
+</form-->
 
 
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<!-- Simple Map -->
+<!-- Simple Map >
 
-<button onclick="getLocation()">Get Your Location</button>
+<button onclick="getLocation()">Get Your Location</button-->
 
 
 
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!-- Complicated Map -->
-  <div class="map_canvas"></div>
-    
-    <form>
-      <input id="geocomplete" type="text" placeholder="Type in an address" value="111 Broadway, New York, NY" />
-      <input id="find" type="button" value="find" />
-      
-      <fieldset>
-        <label>Latitude</label>
-        <input name="lat" type="text" value="">
-      
-        <label>Longitude</label>
-        <input name="lng" type="text" value="">
-      
-        <label>Formatted Address</label>
-        <input name="formatted_address" type="text" value="">
-      </fieldset>
-      
-      <a id="reset" href="#" style="display:none;">Reset Marker</a>
-    </form>
+<div class="map_canvas"></div>
 
-     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    
-    <script src="map/jquery.geocomplete.js"></script>
-    
+<form id="messageform" action="#" >
+  <input id="geocomplete" type="text" placeholder="Type in an address" />
+
+  <fieldset>
+    <label>Latitude</label>
+    <input name="lat" id="lat" type="text" value="">
+
+    <label>Longitude</label>
+    <input name="lng" id="lng" type="text" value="">
+
+    <label>Messages to bae</label>
+    <input name="message" id="message" type="text" value="">
+    <input type="submit" name="message" id="messagebutton" value="Send Message">
+
+</fieldset>
+
+<a id="reset" href="#" style="display:none;">Reset Marker</a>
+</form>
+
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+<script src="map/jquery.geocomplete.js"></script>
+
 
 <script>
 
@@ -107,10 +108,10 @@
 //----------------------------------------------------------------------------------------------------------
 // Send user info to parse
 
-    console.log("Successfully sent!")
+console.log("Successfully sent!")
 
-    function register(){
-        var user = new Parse.User();
+function register(){
+    var user = new Parse.User();
     user.set("email", $('#email').val()); //this inputs whatever user inputs//
     user.set("username", $('#email').val())
     user.set("password", $('#password').val());
@@ -131,10 +132,12 @@ error: function(user, error) {
 // Send message to parse
 
 function message(){ //message function isn't tied to anything
-    var Message = Parse.Object.extend("message");
-    console.log("Message also successfully sent!") 
+var Message = Parse.Object.extend("message");
+console.log("Message AND geo also successfully sent!") 
     var message3 = new Message (); //variable name is separate from function
     message3.set("message", $('#message').val());
+    message3.set("lat", $('#lat').val());
+    message3.set("lng", $('#lng').val());
     message3.set("OwnerID", Parse.User.current().id);
     message3.set("ReceiverID", Parse.User.current().id)
 
@@ -155,11 +158,9 @@ function message(){ //message function isn't tied to anything
 
 //----------------------------------------------------------------------------------------------------------
 
-// Send geo coordinates to parse
-
 function geo(geo_x, geo_y){ //message function isn't tied to anything
-    var Geo = Parse.Object.extend("geo");
-    console.log("Geo also successfully sent!") 
+var Geo = Parse.Object.extend("geo");
+console.log("Geo also successfully sent!") 
     var geoPackage = new Geo (); //variable name is separate from function
     geoPackage.set("geo_x", geo_x);
     geoPackage.set("geo_y", geo_y);
@@ -179,8 +180,6 @@ function geo(geo_x, geo_y){ //message function isn't tied to anything
      }
  });
 }
-
-
 //----------------------------------------------------------------------------------------------------------
 
 // Register New User
@@ -203,11 +202,10 @@ Parse.serverURL = 'http://localhost:1337/parse';
 
 var x = document.getElementById("demo");
 
-
 //----------------------------------------------------------------------------------------------------------
 
 // Simple Map //
-function getLocation() {
+/* function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
@@ -240,39 +238,39 @@ function showError(error) {
         x.innerHTML = "An unknown error occurred."
         break;
     }
-}
-
+} */
 
 //----------------------------------------------------------------------------------------------------------
 
 // Draggable Map 
 
 $(function(){
-        $("#geocomplete").geocomplete({
-          map: ".map_canvas",
-          details: "form ",
-          markerOptions: {
-            draggable: true
-          }
-        });
-        
-        $("#geocomplete").bind("geocode:dragged", function(event, latLng){
-          $("input[name=lat]").val(latLng.lat());
-          $("input[name=lng]").val(latLng.lng());
-          $("#reset").show();
-        });
-        
-        
-        $("#reset").click(function(){
-          $("#geocomplete").geocomplete("resetMarker");
-          $("#reset").hide();
-          return false;
-        });
-        
-        $("#find").click(function(){
-          $("#geocomplete").trigger("geocode");
-        }).click();
-      });
+    $("#geocomplete").geocomplete({
+      map: ".map_canvas",
+      details: "form ",
+      markerOptions: {
+        draggable: true
+    }
+});
+
+    $("#geocomplete").bind("geocode:dragged", function(event, latLng){
+      $("input[name=lat]").val(latLng.lat());
+      $("input[name=lng]").val(latLng.lng());
+      $("#reset").show();
+  });
+
+
+
+    $("#reset").click(function(){
+      $("#geocomplete").geocomplete("resetMarker");
+      $("#reset").hide();
+      return false;
+  });
+
+    $("#find").click(function(){
+      $("#geocomplete").trigger("geocode");
+  }).click();
+});
 </script>
 
 
