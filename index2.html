@@ -7,18 +7,29 @@
     <meta name="robots" content="noindex, nofollow">
     
     <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="map/examples/styles.css" />
+    <style type="text/css" media="screen">
+      form { width: 300px; float: left; margin-left: 20px}
+      
+      fieldset { width: 320px; margin-top: 20px}
+      fieldset strong { display: block; margin: 0.5em 0 0em; }
+      fieldset input { width: 95%; }
+      
+      ul span { color: #999; }
+    </style>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/registration.js"></script>
     <script type="text/javascript" src="js/message.js"></script>
-    <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
-<script src="jquery.geocomplete.js"></script>
    
 
 
 </head>
 
 <body>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!-- Sign up Form -->
 
     <div class="container">
         <div class="main">
@@ -40,10 +51,10 @@
     </div>
 </div>
 
-<button onclick="getLocation()">Get Your Location</button>
 
-<div id="mapholder"></div>
 
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!-- Message Form -->
 
 <ul id="message1"></ul>
 <form id="messageform" action="#" >
@@ -52,10 +63,50 @@
     <input type="submit" name="message" id="messagebutton" value="Send Message">
 </form>
 
- <div id="mapid"></div>
 
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!-- Simple Map -->
+
+<button onclick="getLocation()">Get Your Location</button>
+
+
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<!-- Complicated Map -->
+  <div class="map_canvas"></div>
+    
+    <form>
+      <input id="geocomplete" type="text" placeholder="Type in an address" value="111 Broadway, New York, NY" />
+      <input id="find" type="button" value="find" />
+      
+      <fieldset>
+        <label>Latitude</label>
+        <input name="lat" type="text" value="">
+      
+        <label>Longitude</label>
+        <input name="lng" type="text" value="">
+      
+        <label>Formatted Address</label>
+        <input name="formatted_address" type="text" value="">
+      </fieldset>
+      
+      <a id="reset" href="#" style="display:none;">Reset Marker</a>
+    </form>
+
+     <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    
+    <script src="map/jquery.geocomplete.js"></script>
+    
 
 <script>
+
+
+
+//----------------------------------------------------------------------------------------------------------
+// Send user info to parse
+
     console.log("Successfully sent!")
 
     function register(){
@@ -73,6 +124,11 @@ error: function(user, error) {
 }
 });
 }
+
+
+//----------------------------------------------------------------------------------------------------------
+
+// Send message to parse
 
 function message(){ //message function isn't tied to anything
     var Message = Parse.Object.extend("message");
@@ -97,6 +153,9 @@ function message(){ //message function isn't tied to anything
 }
 
 
+//----------------------------------------------------------------------------------------------------------
+
+// Send geo coordinates to parse
 
 function geo(geo_x, geo_y){ //message function isn't tied to anything
     var Geo = Parse.Object.extend("geo");
@@ -122,6 +181,10 @@ function geo(geo_x, geo_y){ //message function isn't tied to anything
 }
 
 
+//----------------------------------------------------------------------------------------------------------
+
+// Register New User
+
 $('#form').submit(function(e) {
     e.preventDefault();
     register(); //call means () which is to call the register function
@@ -140,6 +203,10 @@ Parse.serverURL = 'http://localhost:1337/parse';
 
 var x = document.getElementById("demo");
 
+
+//----------------------------------------------------------------------------------------------------------
+
+// Simple Map //
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition, showError);
@@ -156,7 +223,6 @@ function showPosition(position) {
     var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="
     +latlon+"&zoom=19&size=400x300&sensor=false";
     document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
-    console.log("position.coords.latitude + "," + position.coords.longitude;")
 }
 
 function showError(error) {
@@ -177,6 +243,36 @@ function showError(error) {
 }
 
 
+//----------------------------------------------------------------------------------------------------------
+
+// Draggable Map 
+
+$(function(){
+        $("#geocomplete").geocomplete({
+          map: ".map_canvas",
+          details: "form ",
+          markerOptions: {
+            draggable: true
+          }
+        });
+        
+        $("#geocomplete").bind("geocode:dragged", function(event, latLng){
+          $("input[name=lat]").val(latLng.lat());
+          $("input[name=lng]").val(latLng.lng());
+          $("#reset").show();
+        });
+        
+        
+        $("#reset").click(function(){
+          $("#geocomplete").geocomplete("resetMarker");
+          $("#reset").hide();
+          return false;
+        });
+        
+        $("#find").click(function(){
+          $("#geocomplete").trigger("geocode");
+        }).click();
+      });
 </script>
 
 
